@@ -1,0 +1,140 @@
+{% extends "app/main.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block container %}
+<div class="container" ng-controller="orderCtrl" ng-init="initOrder();">
+	<div class="row">
+		<div class="col-sm-8 col-xs-12">
+{% thumbnail inventory.image "600x400" crop="center" as im %}
+<img class="img-thumbnail" src="{{ im.url }}">
+{% endthumbnail %}
+			<div class="row">
+				<div class="col-xs-12">
+					<h3>Drinks & Sides</h3>
+				</div>
+				<div class="col-sm-4 col-xs-6 text-center">
+					<img class="img-thumbnail" src="{% static 'img/drink1.jpg' %}">
+					<input type="checkbox" ng-model="drink1" ng-click="drink=drink+1.50" value="1.50" style="background:rgba(255,255,255,0.8);position:absolute;top:1px;left:20px;">
+					<h5>$1.50</h5>
+				</div>
+				<div class="col-sm-4 col-xs-6 text-center">
+					<img class="img-thumbnail" src="{% static 'img/drink2.jpg' %}">
+					<input type="checkbox" ng-model="drink2" ng-click="drink=drink+2.50" value="2.50" style="background:rgba(255,255,255,0.8);position:absolute;top:1px;left:20px;">
+					<h5>$2.50</h5>
+				</div>
+				<div class="col-sm-4 col-xs-6 text-center">
+					<img class="img-thumbnail" src="{% static 'img/side1.jpg' %}">
+					<input type="checkbox" ng-model="side1" ng-click="drink=drink+3.50" value="3.50" style="background:rgba(255,255,255,0.8);position:absolute;top:1px;left:20px;">
+					<h5>$3.50</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4 col-xs-12 well">
+			<h1>{{inventory.name}} <del>${{inventory.original_price}}</del></h1>
+			<p>{{inventory.ingredients}}</p>
+			<div class="form-group">
+				<label class="control-label"><strong>Quantity</strong></label>
+				<input type="number" class="form-control" ng-model="quantity" name="quantity" value="quantity">
+			</div>
+
+			<div class="form-group">
+				<label class="control-label"><strong>Collection Method</strong></label>
+				<div class="radio">
+					<label><input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked="">Self-Collection</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="optionsRadios" id="optionsRadios2" value="2" disabled>Delivery</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label"><strong>Notification</strong></label>
+				<div class="checkbox">
+					<label><input type="checkbox"> Send me an alert when my order is ready</label>
+				</div>
+			</div>
+			<a class="btn btn-lg btn-block btn-primary" href="{% url 'app-confirm' pk=inventory.pk %}">Paylah! ${[{price*quantity+drink|number:2}]}</a>
+		</div>
+		
+	</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{block.super}}
+<script type="text/javascript">
+function randomString(length) {
+    return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+}
+
+function date2str(x, y) {
+    var z = {
+        M: x.getMonth() + 1,
+        d: x.getDate(),
+        h: x.getHours(),
+        m: x.getMinutes(),
+        s: x.getSeconds()
+    };
+    y = y.replace(/(M+|d+|h+|m+|s+)/g, function(v) {
+        return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-2)
+    });
+
+    return y.replace(/(y+)/g, function(v) {
+        return x.getFullYear().toString().slice(-v.length)
+    });
+}
+/*
+$(document).ready(function() {
+	console.log("submitting ajax request");
+	var paylahURL = "https://118.201.8.226/middleware/sandbox/DBSMerchantServlet?serviceID=<serviceID>&appID=<appID>&channel=<channel>&merchantRequest=<merchantRequest>&clientRandomKey=123456&encrypt=false";
+	paylahURL = paylahURL.replace("<serviceID>", "P2BS4003");
+	paylahURL = paylahURL.replace("<appID>", "DBSP2BPG");
+	paylahURL = paylahURL.replace("<channel>", "My+Merchant+Name");
+	//paylahURL = paylahURL.replace("<merchantRequest>", "Grm7kG/mpiU020gvSSPu/v7KtQxHikpelMRCdogLa6XUKFq0dZvd1JT1VeCZv/p0QSzuoMuqS+ekcDOP7fKQ2dFWSEwHqbx9F69AOTfMd+9nLu8e4xSCpogx2WwAZoDA/kXiTJV6ywIiVSQwADrDCxevAdKZlje012XpjfuknRAiKJwEHCMQWD5udeuy1Kpc8Zv0ComWvz9BcUt/4zNf87DUJ3sm9lUEvolghCKUmMV0p1S/F/MUVwc7XjkBvn+xjh0YIN5TVoFzu5J2imY9mjqxwJGaJtlCr5/SATsfVa+kFcve/N3feCOu0BKUd3yhTtIjlyocyW0qmGoVHyafES76cvatvo4IoNih+0cdUpPFqkkWX8rTFv4T1hjV0TXUtfXOPWMt4L14RszIMFhi2cGQn3NwXjDRDuFOVNzpm/s73euaHjn3DAta6RVKj225xSWtE1UOSRyLFD7SLmNIMY57siwUa5M1ckFR3vdcgPW28PoHVdSuJq1Tpub5n9tIoJ8O3T6KO1hBCjBW4h0o/DIz4sYMP6rd2ruZ5MQZIDYPr+oLWc2Y3V3EssC5MfkComlETzhfqbskvkG6AUiFL+4vhjSEiU3y/C4T6uVBQr4Gwdp/MYSr4ReeDEyhoSbQWQhhK1gFqoHCZqgzZ10XVSZekPOVkWqAMZa2psl6uB5Ae+nXjmquPMSQbxKNJfyQCjkY5+280zxATSRNH9gZBp9Q+AGS5o3ao9Rvmm2iIo/2Tx9SbAhtF76lSpW1ZMa1cap1hHBRG+4xP614yUqjNlJF9MS6smoPNd48AyM/kWXr19oVexAGqAQvIYYrdXCHY1sR4fXcHUY3s2LVIW3ExK/kssb33zNcWdUqRp7UuwKwVRAUiTkEthT1UsWmWJF7dVFEm4hoG0l/dOb86Ir6HPHacPVMwT8t7Czq3n7+ZE1SwzFkFKcvDPuiEcHQ2lpiYFkcxfLErJ1Jk0g7n75KChUp76w4PBWhegtgynMgM4s=");
+	//paylahURL = paylahURL.replace("<clientRandomKey>", "IF6+jGNIez1kHAJ7SI+/T9BtLa2lXjVBS32cwVT91bgY7/OCXaa44tEaf/2tfsBlkV/ZVK6Yn9h6roMg+RGfH/WEvRoKI1Ih4Wy6O8ahZVeTdt/8u3ulETclTSa6Bwl89Q9Vk7NNKptkxqr4gHh9x9yo5JhhJjNLgTrundmFEJVa7u/HleH77AMq2NezJ5kyzoTNqQ3O2JVRvGWhNX+bmKYpGKQmKW+/3Y7GJiGOEtJqvUai0WBl3r+2n/cxQhat+SA6/0l9HEyAU6YLMVSphm6nnVHySi+XPABxyhWSMm396619VhIo+C7tynwxFKGY0FJsFvnXn/qBLgEXsUClVw==");
+	var transactionReferenceNo = randomString(20);
+	var data = {
+		merchantSecretAPIKey: "3815128197802690638397880438055880758999",
+		merchantCode: "168700800012",
+		merchantTxnReferenceNumber: transactionReferenceNo,
+		pGTxnReferenceNumber: transactionReferenceNo,
+		transactionDateTime: date2str(new Date(), "dd-mm-yyyy hh:mm:ss"),
+		txnSource: "Web",
+		merchantTxnType: "P",
+		currencyCode: "SGD",
+		transactionAmount: 23.32,
+		designatedPaylahMobile: 92000000,
+		payeeShippingAddressNeeded: "N"
+	};
+	paylahURL = paylahURL.replace("<merchantRequest>", JSON.stringify(data));
+	console.log(paylahURL);
+	$.ajax({
+		url: paylahURL,
+		type: "post",
+		success: function(data) {
+			console.log(data);
+		},
+		error: function(jqxhr) {
+			console.log(jqxhr);
+		}
+	});
+});
+*/
+</script>
+<script type="text/javascript">
+(function() {
+	"use strict";
+	var app = angular.module("walletApp");
+	app.controller("orderCtrl", function($scope) {
+		$scope.name = "Order Controller";
+		$scope.initOrder = function() {
+			console.log("init order");
+			$scope.quantity = 1;
+			$scope.drink = 0;
+			$scope.price = "{{inventory.reduced_price}}";
+		};
+	});
+})();
+</script>
+{% endblock %}

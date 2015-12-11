@@ -1,0 +1,22 @@
+<nav class="navbar">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<i class="fa fa-fw fa-bars fa-2x"></i>
+			</button>
+			<a class="navbar-brand" href="#">My<strong>Fat</strong>Wallet</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right text-uppercase">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Enterprise <i class="fa fa-fw fa-caret-down"></i></a>
+					<ul class="dropdown-menu">
+						<li><a ui-sref="app-dashboard">Dashboard</a></li>
+						<li><a href="{% url 'app-inventory-management' %}">Manage Inventory</a></li>
+					</ul>
+				<li><a ui-sref="app-client">Later Lunch App</a></li>
+				<li><a href="{% url 'app-signout' %}"><i class="fa fa-fw fa-sign-out"></i> Sign Out</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

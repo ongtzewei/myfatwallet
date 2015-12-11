@@ -1,0 +1,17 @@
+{% extends "rest_framework/base.html" %}
+{% load compress %}
+{% load hosts %}
+{% load static %}
+{% block bootstrap_theme %}
+{% compress css %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+{% endcompress %}
+{% endblock %}
+
+{% block title %}DEVELOPER API | MyFatWallet{% endblock %}
+{% block branding %}
+<a class='navbar-brand' rel="nofollow" {% comment %}href="{% host_url 'website-main' host 'default' %}"{% endcomment %}>
+	MyFatWallet Developer API <span class="version">{{ 0.7 }}</span>
+</a>
+{% endblock %}
+

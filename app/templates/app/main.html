@@ -1,0 +1,61 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block navbar %}
+{% include "app/top-navbar.html" %}
+{% endblock navbar %}
+
+{% block container %}
+<div class="app" ng-controller="AppMainCtrl" ui-view></div>
+{% endblock container %}
+
+{% block javascript %}
+{{block.super}}
+<script src="{% static 'js/app-controllers.js' %}"></script>
+<script type="text/javascript">
+(function() {
+	"use strict";
+	var app = angular.module("walletApp");
+	app.controller("AppMainCtrl", function($scope) {
+		$scope.name = "App Main Controller";
+	}).config(function($stateProvider, $urlRouterProvider) {
+		var mainState = {
+			name: "app-client",
+			controller: "ListingCtrl",
+			url: "/client",
+			templateUrl: "{% static 'html/app/listing.html' %}"
+		};
+		var historyState = {
+			name: "app-transaction-history",
+			controller: "HistoryCtrl",
+			url: "/transaction-history",
+			templateUrl: "{% static 'html/app/transaction-history.html' %}",
+		};
+		var orderState = {
+			name: "app-order-status",
+			controller: "OrderCtrl",
+			url: "/order-status",
+			templateUrl: "{% static 'html/app/order-status.html' %}"
+		};
+		var inventoryState = {
+			name: "app-inventory",
+			controller: "InventoryCtrl",
+			url: "/inventory/{inventoryId}",
+			templateUrl: "{% static 'html/app/inventory.html' %}"
+		};
+		var dashboardState = {
+			name: "app-dashboard",
+			controller: "DashboardCtrl",
+			url: "/dashboard",
+			templateUrl: "{% static 'html/app/dashboard.html' %}"
+		};
+		$urlRouterProvider.otherwise("/dashboard");
+		$stateProvider
+			.state(mainState)
+			.state(historyState)
+			.state(orderState)
+			.state(dashboardState);
+	});
+})();
+</script>
+{% endblock javascript %}

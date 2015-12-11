@@ -1,0 +1,39 @@
+{% extends "app/main.html" %}
+{% load thumbnail %}
+{% block container %}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 text-right" style="padding-bottom:10px;">
+			<a href="#" class="btn btn-default">Add Item</a>
+		</div>
+	</div>
+	<div class="row">
+		{% for item in inventory %}
+		<div class="col-sm-3 col-xs-12" style="padding-bottom:30px;">
+{% thumbnail item.image "600x400" crop="center" as im %}
+			<img  class="img-thumbnail" src="{{ im.url }}">
+{% endthumbnail %}
+			<a href="#" class="btn btn-block btn-success"><i class="fa fa-fw fa-picture-o"></i> Upload Image</a>
+			<div class="form-group">
+				<label class="control-label">Name</label>
+				<input class="form-control" type="text" value="{{item.name}}">
+			</div>
+			<div class="form-group">
+				<label class="control-label">Original Price</label>
+				<input class="form-control" type="text" value="{{item.original_price}}">
+			</div>
+			<div class="form-group">
+				<label class="control-label">Reduced Price</label>
+				<input class="form-control" type="text" value="{{item.reduced_price}}">
+			</div>
+			<div class="form-group">
+				<label class="control-label">Ingredients</label>
+				<textarea class="form-control">{{item.ingredients}}</textarea>
+			</div>
+			<a class="btn btn-block btn-primary" href="#">Save</a>
+			<a class="btn btn-block btn-danger" href="#">Remove</a>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

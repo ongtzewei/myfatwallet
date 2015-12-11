@@ -1,0 +1,13 @@
+<div class="container inventory-listing" ng-controller="ListingCtrl" ng-init="initListing();">
+	<div class="row">
+		<div class="col-sm-4 col-xs-12 text-center" ng-repeat="item in inventory">
+			<a href="/inventory/{[{item.pk}]}">
+				<img class="img-thumbnail" src="{[{item.image}]}">
+			</a>
+			<div class="caption">
+				<h5>{[{item.name}]} <del>${[{item.original_price}]}</del></h5>
+				<h4><span class="label label-success">NOW ${[{item.reduced_price}]}</span></h4>
+			</div>
+		</div>
+	</div>
+</div>

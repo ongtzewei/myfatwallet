@@ -1,0 +1,4 @@
+{{object.description}}
+{{object.category}}
+{{object.date_added}}
+{{object.last_modified}}

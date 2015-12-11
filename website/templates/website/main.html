@@ -1,0 +1,41 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block container %}
+<div class="website" ng-controller="MainWebsiteCtrl" ui-view></div>
+{% endblock container %}
+
+{% block javascript %}
+{{block.super}}
+<script src="{% static 'js/website-controllers.js' %}"></script>
+<script type="text/javascript">
+(function() {
+	"use strict";
+	var app = angular.module("walletApp");
+	app.controller("MainWebsiteCtrl", function($scope) {
+		$scope.name = "Website Main Controller";
+	}).config(function($stateProvider, $urlRouterProvider) {
+		var mainState = {
+			name: "website-main",
+			controller: "SpotlightCtrl",
+			url: "/",
+			templateUrl: "{% static 'html/website/spotlight.html' %}"
+		};
+		var signinState = {
+			name: "website-signin",
+			controller: "SigninCtrl",
+			url: "/signin",
+			templateUrl: "{% static 'html/website/signin.html' %}",
+		};
+		var signupState = {
+			name: "website-signup",
+			controller: "SignupCtrl",
+			url: "/signup",
+			templateUrl: "{% static 'html/website/signup.html' %}"
+		};
+		
+		$urlRouterProvider.otherwise("/");
+		$stateProvider.state(mainState).state(signinState).state(signupState);
+	});
+})();
+</script>
+{% endblock javascript %}

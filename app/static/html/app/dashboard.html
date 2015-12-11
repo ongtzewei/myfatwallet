@@ -1,0 +1,20 @@
+<div class="container" ng-controller="DashboardCtrl" ng-init="initDashboard();">
+	<div class="col-sm-7 col-xs-12">
+		<h4>Today's takings: <strong>{[{total_takings}]}</strong></h4>
+		<div class="pie-chart">
+			<pie-chart data="revenue_data" options="revenue_options"></pie-chart>
+		</div>
+	</div>
+	<div class="col-sm-5 col-xs-12">
+		<h4>Today's Transactions</h4>
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="transaction in transactions">
+				<h5 style="display:inline-block;float:right;">
+					<span class="label" ng-class="{'label-success':transaction.status=='fulfilled','label-warning':transaction.status=='pending','label-danger':transaction.status=='cancelled'}"><i class="fa fa-fw fa-info-circle"></i> {[{transaction.status}]}</span>
+				</h5>
+				Order made for {[{transaction.order}]}: <strong>{[{transaction.amount}]}</strong>
+				<br><i class="fa fa-fw fa-mobile"></i>{[{transaction.payer}]} <i class="fa fa-fw fa-usd"></i>{[{transaction.payment}]}
+			</li>
+		</ul>
+	</div>
+</div>
